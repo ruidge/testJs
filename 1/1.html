@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>初识jQuery</title>
+    <meta charset="UTF-8">
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js" type="text/javascript"></script>
+    <link href="1.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div id="test">Hello ruidge!</div>
+<div>div的内容</div>
+<div>Hello world!</div>
+
+<button onclick="bclick()">点我！</button>
+<script type="text/javascript">
+    //函数名为click无效
+    function bclick() {
+        sayHello();
+        replace();
+    }
+    function sayHello(){
+        $("#test").show();
+    }
+    function replace(){
+        $("div").html("Hello iMooc!");
+    }
+</script>
+</body>
+</html>
