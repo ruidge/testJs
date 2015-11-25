@@ -1,0 +1,231 @@
+1、MySql：SQL语句
+2、JDBC、客户信息管理系统
+3、分页、事务、连接池
+4、元数据、开发一套自定义的JDBC框架
+5、DBUtils的框架、多表操作
+一、MySql的安装与配置
+1、如何验证安装成不成功？
+cmd
+mysql -u root -psorry
+退出客户端exit
+show databases; 查看所有的数据库
+二、练习
+约定：
+shell>>开头：输入的是windows命令
+mysql>>开头：输入的是MySql的命令（必须进入MySql）
+如果单词大写，说明输入的是MySql的关键字。小写，用户可以自定义的名称
+创建一个名称为mydb1的数据库
+mysql>>CREATE DATABASE mydb1;
+查看前面创建的mydb2数据库的定义信息
+mysql>>SHOW CREATE DATABASE mydb1;
+创建一个使用gbk字符集的mydb2数据库
+mysql>>CREATE DATABASE mydb2 CHARACTER SET gbk;
+创建一个使用utf8字符集，并带校对规则的mydb3数据库。
+mysql>>CREATE DATABASE mydb3 CHARACTER SET utf8 COLLATE utf8_general_ci;
+查看当前数据库服务器中的所有数据库
+mysql>>SHOW DATABASES;
+删除前面创建的mydb1数据库
+mysql>>DROP DATABASE mydb1;
+查看服务器中的数据库，并把其中mydb2库的字符集修改为utf8;
+mysql>>ALTER DATABASE mydb2 CHARACTER SET utf8;
+备份test库中的数据（只会备份数据库中的表结构和记录，不会备份数据库本身）
+shell>>mysqldump -u root -psorry test>d:/test.sql
+远程备份
+shell>>mysqldump -h 主机的ip地址 -u root -psorry test>d:/test.sql
+选择并使用某个数据库
+mysql>>USE test;
+恢复test数据库
+mysql>>CREATE DATABASE test;
+mysql>>USE test;
+mysql>>SOURCE D:/test.sql
+恢复test数据库另外一种方式
+shell>>mysql -u root -psorry test<D:/test.sql
+创建一个员工表(mydb2.创建标签要使用数据库)
+mysql>>CREATE TABLE employee(
+ id INT,
+ name VARCHAR(30),
+ gender VARCHAR(10),
+ birthday DATE,
+ entry_date DATE,
+ job VARCHAR(30),
+ salary FLOAT(8,2),
+ resume TEXT
+);
+在上面员工表的基本上增加一个image列
+mysql>>ALTER TABLE employee ADD image BLOB;
+查看表结构
+mysql>>DESC employee;
+查看表的创建细节
+mysql>>SHOW CREATE TABLE employee;
+修改job列，使其长度为60。
+mysql>>ALTER TABLE employee MODIFY job VARCHAR(60);
+删除gender列
+mysql>>ALTER TABLE employee DROP gender;
+表名改为user
+mysql>>RENAME TABLE employee TO user;
+修改表的字符集为utf-8
+mysql>>ALTER TABLE user CHARACTER SET utf8;
+列名name修改为username
+mysql>>ALTER TABLE user CHANGE name username VARCHAR(30);
+使用insert语句向表中插入三个员工的信息
+方式一、
+mysql>>INSERT INTO user (id,username,birthday,entry_date,job,salary) VALUES(1,'zhangranran','1986-01-09','2012-05-10','coder',10000.00);
+方式二、（字段的值都是用户来填写的）
+mysql>>INSERT INTO user VALUES(2,'guolei','1988-01-10','2012-05-10','coder',11000.00);
+方式三、（id字段是由数据库自动生成的，当前无法实验）
+mysql>>INSERT INTO user (username,birthday,entry_date,job,salary) VALUES('zhangranran','1986-01-09','2012-05-10','coder',10000.00);
+插入中文数据
+mysql>>INSERT INTO user VALUES(3,'娇姐','1989-01-10','2012-05-10','coder',12000.00);
+查看编码的类型
+mysql>>SHOW variables LIKE 'character%';
+*character_set_client 指示客户端使用的编码
+*character_set_connection 连接数据库时的编码
+*character_set_database 数据库的编码
+*character_set_results 结果的编码
+character_set_server 服务程序的编码
+character_set_system
+修改客户端使用的编码(只对当前窗口有效)
+mysql>>SET character_set_client=gbk;
+mysql>>SET character_set_results=gbk;
+将所有员工薪水修改为5000元。
+mysql>>UPDATE user SET salary=5000;
+将姓名为zhangranran的员工薪水修改为3000元。
+mysql>>UPDATE user SET salary=3000 WHERE username='zhangranran';
+将姓名为guolei的员工薪水修改为4000元,job改为ccc。
+mysql>>UPDATE user SET salary=4000,job='ccc' WHERE username='guolei';
+将“娇姐”的薪水在原有基础上增加1000元。
+mysql>>UPDATE user SET salary=salary+1000 WHERE username='娇姐';
+删除表中名称为guolei的记录
+mysql>>DELETE FROM user WHERE username='guolei';
+删除表中所有记录(一条一条地删除)
+mysql>>DELETE FROM user;
+使用truncate删除表中记录（摧毁整张表格，然后重建表结构）
+mysql>>TRUNCATE user;
+查询表中所有学生的信息
+mysql>>SELECT * FROM student;
+mysql>>SELECT id,name,chinese,english,math FROM student;
+查询表中所有学生的姓名和对应的英语成绩
+mysql>>SELECT name,english FROM student;
+过滤表中重复数据英语
+mysql>>SELECT DISTINCT english FROM student;
+在所有学生数学分数上加10分特长分
+mysql>>SELECT name,math+10 FROM student;
+统计每个学生的总分
+mysql>>SELECT name,chinese+english+math FROM student;
+使用别名表示学生分数。
+mysql>>SELECT name AS 姓名,chinese+english+math AS 总分 FROM student;
+或者
+mysql>>SELECT name 姓名,chinese+english+math 总分 FROM student;
+查询姓名为 王五 的学生成绩
+mysql>>SELECT id,name,chinese,english,math FROM student WHERE name='王五';
+查询英语成绩大于90分的同学
+mysql>>SELECT name,english FROM student WHERE english>90;
+查询总分大于200分的所有同学
+mysql>>SELECT name,chinese+english+math total FROM student WHERE (chinese+english+math)>250;
+查询英语分数在 80－90之间的同学
+mysql>>SELECT name,english FROM student WHERE english>80 AND english<=90;
+或者
+mysql>>SELECT name,english FROM student WHERE english BETWEEN 80 AND 90;
+查询数学分数为89,90,91的同学
+mysql>>SELECT name,math FROM student WHERE math IN (89,90,91);
+查询所有姓李的学生成绩
+mysql>>SELECT name,chinese,english,math FROM student WHERE name LIKE '李%';
+查询数学分>80，语文分>80的同学
+mysql>>SELECT name,chinese,english,math FROM student WHERE math>80 AND chinese>80;
+对数学成绩排序后输出
+mysql>>SELECT name,math FROM student ORDER BY math DESC;
+对总分排序后输出，然后再按从高到低的顺序输出
+mysql>>SELECT name 姓名,chinese+english+math 总分 FROM student ORDER BY chinese+english+math DESC;
+对姓李的学生成绩排序输出
+mysql>>SELECT name,chinese,english,math FROM student WHERE name LIKE '李%' ORDER BY math DESC;
+统计一个班级共有多少学生
+mysql>>SELECT count(*) FROM student;
+统计数学成绩大于90的学生有多少个
+mysql>>SELECT count(*) FROM student WHERE math>80;
+统计总分大于250的人数有多少？
+mysql>>SELECT count(*) FROM student WHERE (chinese+english+math)>250;
+统计一个班级数学总成绩
+mysql>>SELECT SUM(math) FROM student;
+统计一个班级语文、英语、数学各科的总成绩
+mysql>>SELECT SUM(math),SUM(chinese),SUM(english) FROM student;
+统计一个班级语文、英语、数学的成绩总和
+mysql>>SELECT SUM(math+chinese+english) FROM student;
+统计一个班级语文成绩平均分
+mysql>>SELECT SUM(chinese)/COUNT(*) FROM student;
+求一个班级数学平均分
+mysql>>SELECT AVG(math) FROM student;
+求一个班级总分平均分
+mysql>>SELECT AVG(math+chinese+english) FROM student;
+求班级最高分
+mysql>>SELECT MAX(math+chinese+english) FROM student;
+求班级最低分
+mysql>>SELECT MIN(math+chinese+english) FROM student;
+***把数据库的关键字当做普通字符对待。用`进行包围
+对订单表中商品归类后，显示每一类商品的总价
+mysql>>SELECT product,SUM(price) FROM orders GROUP BY product;
+查询购买了几类商品，并且每类总价大于100的商品
+mysql>>SELECT product,SUM(price) FROM orders GROUP BY product HAVING SUM(price)>100;
+------------------------------------
+约束
+定义主键约束（必须有，且唯一）
+逻辑主键：跟业务无关 id
+业务主键：跟业务有关
+create table t1(
+id int primary key,
+name varchar(100)
+);
+定义主键自动增长
+create table t2(
+id int primary key auto_increment,
+name varchar(100)
+);
+定义唯一约束
+create table t3(
+ id int primary key auto_increment,
+ username varchar(30) unique
+);
+定义非空约束
+create table t4(
+ id int primary key auto_increment,
+ username varchar(30) not null
+);
+定义外键约束(多表:多对一 多对多 一对一)
+CONSTRAINT ordersid_FK FOREGIN KEY(ordersid) REFERENCES orders(id)
+一对多
+create table department(
+ id int primary key,
+ name varchar(30)
+);
+create table employee(
+ id int primary key,
+ name varchar(30),
+ dept_id int,
+ CONSTRAINT dept_id_FK FOREIGN KEY(dept_id) REFERENCES department(id)
+);
+多对多
+create table teacher(
+ id int primary key,
+ name varchar(30),
+ salary float
+);
+create table stu(
+ id int primary key,
+ name varchar(30)
+);
+create table teacher_stu(
+ t_id int,
+ s_id int,
+ primary key(t_id,s_id),
+ CONSTRAINT t_id_FK FOREIGN KEY(t_id) REFERENCES teacher(id),
+ CONSTRAINT s_id_FK FOREIGN KEY(s_id) REFERENCES stu(id)
+);
+一对一
+create table person(
+ id int primary key,
+ name varchar(30)
+);
+create table idcard(
+ id int primary key,
+ name varchar(30),
+ CONSTRAINT p_id_FK FOREIGN KEY(id) REFERENCES person(id)
+);
