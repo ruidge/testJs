@@ -17,7 +17,7 @@ mysql>>开头：输入的是MySql的命令（必须进入MySql）
 创建一个名称为mydb1的数据库
 mysql>>CREATE DATABASE mydb1;
 查看前面创建的mydb2数据库的定义信息
-mysql>>SHOW CREATE DATABASE mydb1;
+mysql>>SHOW CREATE DATABASE mydb1;//必须是已经创建成功的
 创建一个使用gbk字符集的mydb2数据库
 mysql>>CREATE DATABASE mydb2 CHARACTER SET gbk;
 创建一个使用utf8字符集，并带校对规则的mydb3数据库。

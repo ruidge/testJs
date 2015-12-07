@@ -1,0 +1,398 @@
+jQuery
+
+$()表示jQuery函数(注意加"")
+
+基础选择器逻辑与css的很相似
+标签选择器:$("TAGNAME")
+类选择器:$(".CLASSNAME")
+ID选择器:$("#ID")
+$(“prev + next”)
+其中参数prev为任何有效的选择器，参数“next”为另外一个有效选择器，它们之间的“+”表示一种上下的层次关系，
+也就是说，“prev”元素最紧邻的下一个元素由“next”选择器返回的并且只返回唯的一个元素。
+$(“prev ~ siblings”)
+其中参数prev与siblings两者之间通过“~”符号形成一种层次相邻的关系，
+表明siblings选择器获取的元素都是prev元素之后的全部同辈元素。
+
+
+过滤选择器  :开头,与前面没有空格
+:first过滤选择器的功能是获取第一个元素
+:first-child子元素过滤选择器 $("li:first-child")所有li的第一个子元素
+:last
+:last-child
+:eq(index) index从0开始计算,可以为负数
+:contains(text) 文本内容查找 text需要加引号
+:has(selector)过滤选择器
+:hidden获取全部不可见的元素 style="display:none" <input type="hide">
+:visible
+属性选择器 [] 与前面没有空格
+[attribute=value]  $("li[title='蔬菜']").css("background-color", "green");
+[attribute!=value]
+[attribute*=value] 属性值contains value $("li[title*='果']").css("background-color", "green");
+:input表单选择器 与前面没有空格
+返回全部的表单元素，不仅包括所有<input>标记的表单元素，而且还包括<textarea>、<select>
+和 <button>标记的表单元素.
+:text表单文本选择器 $(":text").addClass("bg_blue");//将bg_blue的css文件添加,相当于class="bg_blue"
+:password表单密码选择器
+:radio单选按钮选择器
+:checkbox复选框选择器
+:submit提交按钮选择器 $("#frmTest input:submit").addClass("bg_red");
+:image图像域选择器 只能获取<input>图像域，而不能获取<img>格式的图像元素。
+:button表单按钮选择器 只能获取两种类型的普通按钮，且修改了它们的边框颜色，并未获取表单中的“提交按钮”。
+:checked选中状态选择器 checked选择器与input之间没有空格
+:selected选中状态选择器 selected选择器与input之间没有空格
+
+注意:jQuery中
+css只能改style里的属性
+attr可以改元素所有的属性.id,name,style.什么都行
+相当于attr只能定位到style,css已经定位到style里面的kv了
+
+====================
+
+操作DOM元素
+attr()方法的作用是设置或者返回元素的属性，其中attr(属性名)格式是获取元素属性名的值，
+attr(属性名，属性值)格式则是设置元素属性名的值。
+使用html()和text()方法操作元素的内容，当两个方法的参数为空时，表示获取该元素的内容，
+而如果方法中包含参数，则表示将参数值设置为元素内容。html带标签格式,text纯文本.
+
+通过addClass()和css()方法可以方便地操作元素中的样式，
+前者括号中的参数为增加元素的样式名称，后者直接将样式的属性内容写在括号中。
+前者通过class实现,后者通过style实现
+addClass("bg_red")//bg_red为style的class的name
+css("background-color", "green")//设置一个属性
+css({"background-color":"red","color":"#fff"})//设置多个属性
+
+使用removeAttr(name)和removeClass(class)分别可以实现移除元素的属性和样式的功能，
+前者方法中参数表示移除属性名，后者方法中参数则表示移除的样式名
+
+以下content可以为标签或者字符串,在形参的jq只需要被""包围即可(外面不需要包裹$())了
+(selector).append(content)方法的功能是向指定的元素中追加内容，
+被追加的content参数，可以是字符、HTML元素标记，还可以是一个返回字符串内容的函数
+$(content).appendTo(selector)//和append相反 //content需要被$(包裹)
+参数content表示需要插入的内容，参数selector表示被选的元素，即把content内容插入selector元素内，默认是在尾部。
+<div>
+    <span class="green">小乌龟</span>
+</div>
+<script type="text/javascript">
+    var $html = "<span class='red'>小青蛙</span>"
+    $($html).appendTo("div");
+</script>
+//appendTo是jQuery方法,所以在字符串前外面包裹$()
+$(selector).before(content)
+$(selector).after(content)
+$(selector).clone()
+$(selector).replaceWith(content)
+$(content).replaceAll(selector)
+$(selector).wrap(wrapper) //包裹本身
+$(selector).wrapInner(wrapper) //包裹里面的内容
+$(selector).each(function(index){})//index从0开始
+    <body>
+        <h3>使用each()方法遍历元素</h3>
+        <span class="green">香蕉</span>
+        <span class="green">桃子</span>
+        <span class="green">葡萄</span>
+        <span class="green">荔枝</span>
+
+        <script type="text/javascript">
+            $("span").each(function (index) { //each
+                if (index == 1) {
+                    $(this).attr("class", "red"); //$(this)
+                }
+            });
+        </script>
+    </body>
+remove()方法删除所选元素本身和子元素，该方法可以通过添加过滤参数指定需要删除的某些元素
+empty()方法则只删除所选元素的子元素
+
+DOM事件
+ready()事件类似于window.onLoad()事件，但前者只要页面的DOM结构加载后便触发，( $(window).load() )
+而后者必须在页面全部元素加载成功才触发，ready()可以写多个按顺序执行，onLoad()只会执行最后一个。下列写法是相等的：
+$(document).ready(function(){})等价于$(function(){});
+$(function() { //$(document).ready(function(){
+                $("#btntest").bind("click", function () {
+                    $("#tip").append("我被点击了！");
+                });
+            });
+bind()方法绑定元素的事件非常方便，绑定前，需要知道被绑定的元素名，绑定的事件名称，
+事件中执行的函数内容就可以，它的绑定格式如下：
+$(selector).bind(event,[data] function)
+<input id="btntest" type="button" value="点击或移出就不可用了" />
+        <script type="text/javascript">
+            $(function () {
+                $("#btntest").bind("click mouseout", function () {//两个事件引号中用空格
+                    $(this).attr("disabled", "true");
+                })
+            });
+        </script>
+hover()方法的功能是当鼠标移到所选元素上时，执行方法中的第一个函数，鼠标移出时，
+执行方法中的第二个函数，实现事件的切实效果，调用格式如下：
+$(selector).hover(over，out);
+<script type="text/javascript">
+            $(function () {
+                $("div").hover(
+                function () {
+                    $(this).addClass("orange");
+                },
+                function () {
+                    $(this).removeClass("orange")
+                })
+            });
+        </script>
+toggle()方法可以在元素的click事件中绑定两个或两个以上的函数，每点一次依次执行,
+同时，它还可以实现元素的隐藏与显示的切换，(没有形参)绑定多个函数的调用格式如下：
+$(selector).toggle(fun1(),fun2(),funN(),...)
+unbind()方法可以移除元素已绑定的事件，它的调用格式如下：
+$(selector).unbind(event,fun)
+其中参数event表示需要移除的事件名称，多个事件名用空格隔开，fun参数为事件执行时调用的函数名称。
+<input id="btntest" type="button" value="移除事件" />
+<div>土豪，咱们交个朋友吧</div>
+        <script type="text/javascript">
+            $(function () {
+                $("div").bind("click",
+                function () {
+                    $(this).removeClass("backcolor").addClass("color");
+                }).bind("dblclick", function () {
+                    $(this).removeClass("color").addClass("backcolor");
+                })
+                $("#btntest").bind("click", function () {
+                    $("div").unbind("dblclick")
+                    $(this).attr("disabled", "true");
+                });
+            });
+        </script>
+
+one()方法可以绑定元素任何有效的事件，但这种方法绑定的事件只会触发一次，它的调用格式如下：
+$(selector).one(event,[data],fun)
+参数event为事件名称，data为触发事件时携带的数据，fun为触发该事件时执行的函数。
+其中event参数为需要手动触发的事件名称。
+trigger()方法可以直接手动触发元素指定的事件，这些事件可以是元素自带事件，也可以是自定义的事件，
+总之，该事件必须能执行，它的调用格式为：
+$(selector).trigger(event)
+<script type="text/javascript">
+            $(function () {
+                $("div").bind("change-color", function () {
+                    $(this).addClass("color");
+                });
+                $("div").trigger("change-color");
+            });
+        </script>//相当于手动执行了change-color方法
+focus事件在元素获取焦点时触发，如点击文本框时，触发该事件；
+而blur事件则在元素丢失焦点时触发，如点击除文本框的任何元素，都会触发该事件。
+<script type="text/javascript">
+            $(function () {
+                $("input")
+                .bind("focus", function () {
+                    $("div").html("请输入您的姓名！");
+                })
+                .bind("blur", function () {
+                    if ($(this).val().length == 0)
+                        $("div").html("你的名称不能为空！");
+                })
+            });
+        </script>
+当一个元素的值发生变化时，将会触发change事件，例如在选择下拉列表框中的选项时，就会触change事件。
+
+动画
+show()和hide()方法用于显示或隐藏页面中的元素
+$(selector).hide(speed,[callback])
+$(selector).show(speed,[callback])
+参数speed设置隐藏或显示时的速度值，可为“slow”、“fast”或毫秒数值，
+可选项参数callback为隐藏或显示动作执行完成后调用的函数名。
+<div>
+            <h4>我喜欢吃的水果</h4>
+            <ul>
+                <li>苹果</li>
+                <li>甘桔</li>
+                <li>梨</li>
+            </ul>
+            <input id="hidval" type="hidden" value="0"/>
+        </div>
+
+        <script type="text/javascript">
+            $(function () {
+                $("h4").bind("click", function () {
+                    if ($("#hidval").val() == 0) {
+                        $("ul").show("slow");
+                        $("#hidval").val(1);
+                    } else {
+                        $("ul").hide();
+                        $("#hidval").val(0);
+                    }
+                });
+            });
+        </script>
+$(selector).toggle(speed,[callback])
+其中speed参数为动画效果时的速度值，可以为数字，单位为毫秒，也可是“fast”、“slow”字符，
+可选项参数callback为方法执行成功后回调的函数名称。
+<div>
+            <h4>
+               <span class="fl">我喜欢吃的水果</span>
+               <span class="fr" id="spnTip">显示</span>
+            </h4>
+            <ul>
+                <li>苹果</li>
+                <li>甘桔</li>
+                <li>梨</li>
+            </ul>
+        </div>
+
+        <script type="text/javascript">
+            $(function () {
+                var $spn = $("#spnTip");
+                $("h4").bind("click", function () {
+                    $("ul").toggle(1000,function(){
+                     $spn.html() == "隐藏" ? $spn.html("显示") : $spn.html("隐藏");
+                    })
+                });
+            });
+        </script>
+可以使用slideUp()和slideDown()方法在页面中滑动元素，前者用于向上滑动元素，后者用于向下滑动元素:(也是针对hide show)
+$(selector).slideUp(speed,[callback])
+$(selector).slideDown(speed,[callback])
+slideDown()仅适用于被隐藏的元素；slideup()则相反。
+<div>
+            <h4>我喜欢吃的水果</h4>
+            <ul>
+                <li>苹果</li>
+                <li>甘桔</li>
+                <li>梨</li>
+            </ul>
+            <input id="hidval" type="hidden" value="0"/>
+        </div>
+
+        <script type="text/javascript">
+            $(function () {
+                $("h4").bind("click", function () {
+                    if ($("#hidval").val() == 0) {
+                        $("ul").slideUp(1000,function() {
+                            $("#hidval").val(1);
+                        })
+                    } else {
+                        $("ul").slideDown(1000,function(){
+                            $("#hidval").val(0);
+                        })
+                    }
+                })
+            });
+        </script>
+
+使用slideToggle()方法可以切换slideUp()和slideDown()，即调用该方法时，如果元素已向上滑动，
+则元素自动向下滑动，反之，则元素自动向上滑动，格式为：
+$(selector).slideToggle(speed,[callback])
+
+<script type="text/javascript">
+
+            $(function () {
+                var $spn = $("#spnTip");
+                $("h4").bind("click", function () {
+                    $("ul").slideToggle(1000,function() {
+               $spn.html() == "向下滑" ? $spn.html("向上滑") : $spn.html("向下滑");
+                    })
+                })
+            });
+        </script>
+fadeIn()和fadeOut()方法可以实现元素的淡入淡出效果，前者淡入隐藏的元素，后者可以淡出可见的元素：
+$(selector).fadeIn(speed,[callback])
+$(selector).fadeOut(speed,[callback])
+<script type="text/javascript">
+            $(function () {
+                $("h4").bind("click", function () {
+                    if ($("#hidval").val() == 0) {
+                        $("ul").fadeIn(1000,function() {
+                            $("#hidval").val(1);
+                        })
+                    } else {
+                        $("ul").fadeOut(1000,function() {
+                            $("#hidval").val(0);
+                        })
+                    }
+                })
+            });
+        </script>
+调用fadeTo()方法，可以将所选择元素的不透明度以淡入淡出的效果调整为指定的值，该方法的调用格式为：
+$(selector).fadeTo(speed,opacity,[callback])
+其中speed参数为效果的速度，opacity参数为指定的不透明值，它的取值范围是0.0~1.0，
+可选项参数callback为效果完成后，回调的函数名。
+<span class="red"></span><span class="orange"></span><span class="blue"></span>
+
+        <script type="text/javascript">
+            $(function () {
+                $("span").each(function (index) {
+                    switch (index) {
+                        case 0:
+                            $(this).fadeTo(1000,0.1);
+                            break;
+                        case 1:
+                            $(this).fadeTo(1000,0.5);
+                            break;
+                        case 2:
+                            $(this).fadeTo(1000,0.9);
+                            break;
+                    }
+                });
+            });
+        </script>
+调用animate()方法可以创建自定义动画效果，它的调用格式为：
+$(selector).animate({params},speed,[callback])
+其中，params参数为制作动画效果的CSS属性名与值，speed参数为动画的效果的速度，
+单位为毫秒，可选项callback参数为动画完成时执行的回调函数名。
+<script type="text/javascript">
+            $(function () {
+                $("span").animate({
+                    width: "80px",
+                    height: "80px"
+                },
+                3000, function () {
+                    $("#tip").html("执行完成!");
+                });
+            });
+        </script>
+调用animate()方法不仅可以制作简单渐渐变大的动画效果，而且还能制作移动位置的动画，在移动位置之前，
+必须将被移元素的“position”属性值设为“absolute”或“relative”，否则，该元素移动不了。
+//先左移100px,再缩放30px
+<script type="text/javascript">
+            $(function () {
+                $("span").animate({
+                    left: "+=100px"
+                }, 3000, function () {
+                    $("span").animate({
+                        height: '+=30px',
+                        width: '+=30px'
+                    }, 3000, function () {
+                        $("#tip").html("执行完成!");
+                    });
+                });
+            });
+        </script>
+stop()方法的功能是在动画完成之前，停止当前正在执行的动画效果，这些效果包括滑动、淡入淡出和自定义的动画：
+$(selector).stop([clearQueue],[goToEnd])
+其中，两个可选项参数clearQueue和goToEnd都是布尔类型值，前者表示是否停止正在执行的动画，
+后者表示是否完成正在执行的动画，默认为false。
+<script type="text/javascript">
+            $(function () {
+                $("span").animate({
+                    left: "+=100px"
+                }, 3000, function () {
+                    $(this).animate({
+                        height: '+=60px',
+                        width: '+=60px'
+                    }, 3000, function () {
+                        $("#tip").html("执行完成!");
+                    });
+                });
+                $("#btnStop").bind("click", function () {
+                   $("span").stop(false,false);
+                    $("#tip").html("执行停止!");
+                });
+            });
+        </script>
+delay()方法的功能是设置一个延时值来推迟动画效果的执行，它的调用格式为：
+(不会延迟当前的动画,当前的完成后延迟接下来的)
+$(selector).delay(duration)
+其中参数duration为延时值，它的单位是毫秒，当超过延时值时，动画继续执行。
+
+
+
+
+
+
+
