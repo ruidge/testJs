@@ -67,7 +67,7 @@ css({"background-color":"red","color":"#fff"})//设置多个属性
 以下content可以为标签或者字符串,在形参的jq只需要被""包围即可(外面不需要包裹$())了
 (selector).append(content)方法的功能是向指定的元素中追加内容，
 被追加的content参数，可以是字符、HTML元素标记，还可以是一个返回字符串内容的函数
-$(content).appendTo(selector)//和append相反 //content需要被$(包裹)
+$(content).appendTo(selector)//和append相反 //content需要被$(包裹),从dom对象转换为jq对象
 参数content表示需要插入的内容，参数selector表示被选的元素，即把content内容插入selector元素内，默认是在尾部。
 <div>
     <span class="green">小乌龟</span>
@@ -76,7 +76,7 @@ $(content).appendTo(selector)//和append相反 //content需要被$(包裹)
     var $html = "<span class='red'>小青蛙</span>"
     $($html).appendTo("div");
 </script>
-//appendTo是jQuery方法,所以在字符串前外面包裹$()
+//appendTo是jQuery方法,所以在字符串前外面包裹$()转换为jq对象
 $(selector).before(content)
 $(selector).after(content)
 $(selector).clone()
@@ -190,6 +190,13 @@ focus事件在元素获取焦点时触发，如点击文本框时，触发该事
             });
         </script>
 当一个元素的值发生变化时，将会触发change事件，例如在选择下拉列表框中的选项时，就会触change事件。
+
+.bind()是直接绑定在元素上
+.live()则是通过冒泡的方式来绑定到元素上的。更适合列表类型的，绑定到document DOM节点上。和.bind()的优势是支持动态数据。
+.delegate()则是更精确的小范围使用事件代理，性能优于.live()
+.on()则是最新的1.9版本整合了之前的三种方式的新事件绑定机制
+
+
 
 动画
 show()和hide()方法用于显示或隐藏页面中的元素
