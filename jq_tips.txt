@@ -399,6 +399,127 @@ $(selector).delay(duration)
 
 
 
+AJAX:
+
+load(url,[data],[callback])
+参数url为加载服务器地址，可选项data参数为请求时发送的数据，callback参数为数据请求成功后，执行的回调函数。
+
+jQuery.getJSON(url,[data],[callback])或$.getJSON(url,[data],[callback])
+
+使用getScript()方法异步请求并执行服务器中的JavaScript格式的文件，它的调用格式如下所示：
+jQuery.getScript(url,[callback])或$.getScript(url,[callback])
+
+$.get(url,[callback])
+$(function () {
+                $("#btnShow").bind("click", function () {
+                    var $this = $(this);
+                    $.get('/data/info_f.php', function(data){
+                        $this.attr("disabled", "true");
+                        $("ul").append("<li>我的名字叫：" + data.name + "</li>");
+                        $("ul").append("<li>男朋友对我说：" + data.say + "</li>");
+                    }, "json");
+                })
+            });
+
+$.post(url,[data],[callback])
+
+使用serialize()方法可以将表单中有name属性的元素值进行序列化，生成标准URL编码文本字符串，直接可用于ajax请求，它的调用格式如下：
+$(selector).serialize()
+其中selector参数是一个或多个表单中的元素或表单元素本身。
+<form action="">
+            <ul>
+                <li>姓名：<input name="Text1" type="text" size="12" /></li>
+                <li>
+                    <select name="Select1">
+                        <option value="0">男</option>
+                        <option value="1">女</option>
+                    </select>
+                </li>
+                <li><input name="Checkbox1" type="checkbox" />资料是否可见 </li>
+                <li id="litest"></li>
+            </ul>
+            </form>
+        </div>
+
+        <script type="text/javascript">
+            $(function () {
+                $("#btnAction").bind("click", function () {
+                    $('#litest').html($('form').serialize());
+                })
+            })
+        </script>
+返回:Text1=zhang&Select1=1&Checkbox1=on 或者 Text1=zhang&Select1=0(checkbox没勾选)
+
+jQuery.ajax([settings])或$.ajax([settings])
+其中参数settings为发送ajax请求时的配置对象，在该对象中，
+url表示服务器请求的路径，(可以省略域名直接写相对路径,比如: url:'/data/check.php')
+data为请求时传递的数据，
+dataType为服务器返回的数据类型，
+success为请求成功的执行的回调函数，
+type为发送数据请求的方式，默认为get。
+
+jQuery.ajaxSetup([options])或$.ajaxSetup([options])
+可选项options参数为一个对象，通过该对象设置Ajax请求时的全局选项值。
+
+$(selector).ajaxStart(function())和$(selector).ajaxStop(function())
+其中，两个方法中括号都是绑定的函数，当发送Ajax请求前执行ajaxStart()方法绑定的函数，
+请求成功后，执行ajaxStop ()方法绑定的函数。
+<body>
+        <div id="divtest">
+            <div class="title">
+                <span class="fl">加载一段文字</span>
+                <span class="fr">
+                    <input id="btnShow" type="button" value="加载" />
+                </span>
+            </div>
+            <ul>
+               <li id="divload"></li>
+            </ul>
+        </div>
+
+        <script type="text/javascript">
+            $(function () {
+                $('#divload').ajaxStart(function(){
+                    $(this).html("正在请求数据...");
+                });
+                $('#divload').ajaxStop(function(){
+                    $(this).html("数据请求完成！");
+                });
+                $("#btnShow").bind("click", function () {
+                    var $this = $(this);
+                    $.ajax({
+                        url: "http://www.imooc.com/data/info_f.php",
+                        dataType: "json",
+                        success: function (data) {
+                            $this.attr("disabled", "true");
+                        $("ul").append("<li>我的名字叫：" + data.name + "</li>");
+                        $("ul").append("<li>男朋友对我说：" + data.say + "</li>");
+                        }
+                    });
+                })
+            });
+        </script>
+    </body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
