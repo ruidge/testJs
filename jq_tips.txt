@@ -506,11 +506,80 @@ $(selector).ajaxStart(function())和$(selector).ajaxStop(function())
 
 
 
+工具类:
+在jQuery中，通过$.browser对象可以获取浏览器的名称和版本信息，
+如$.browser.chrome为true，表示当前为Chrome浏览器，
+$.browser.mozilla为true，表示当前为火狐浏览器,
+$.browser.version方式获取浏览器版本信息。
 
+在jQuery中，可以调用名为$.isEmptyObject的工具函数，检测一个对象的内容是否为空，如果为空，则该函数返回true，否则，返回false值，调用格式如下：
+$.isEmptyObject(obj);
 
+调用名为$.isPlainObject的工具函数，能检测对象是否为通过{}或new Object()关键字创建的原始对象，如果是，返回true，否则，返回false值，调用格式为：
+$.isPlainObject (obj);
 
+调用名为$.contains的工具函数，能检测在一个DOM节点中是否包含另外一个DOM节点，如果包含，返回true，否则，返回false值，调用格式为：
+$.contains (container, contained);//参数值为dom对象而非jQ对象
 
+调用名为$.trim的工具函数，能删除字符串中左右两边的空格符，但该函数不能删除字符串中间的空格，调用格式为：
+$.trim (str);
 
+调用名为$. param的工具函数，能使对象或数组按照key/value格式进行序列化编码，该编码后的值常用于向服务端发送URL请求，调用格式为：
+$.param (obj);
+            $(function () {
+                //基本信息对象
+                var objInfo = new Object();
+                objInfo.name = "白富美";
+                objInfo.sex = 1;
+                //序列化对象
+                var objNewInfo =$.param (objInfo);;
+                //显示序列化后的对象
+                var strTmp = "<b>对象 白富美 序列化后</b>：<br/><br/>";
+                strTmp += objNewInfo;
+                //显示在页面中
+                $(".tip").show().append(strTmp);
+            });
+
+调用名为$.extend的工具函数，可以对原有的工具函数进行扩展，自定义类级别的jQuery插件，调用格式为：
+$. extend ({options});
+        <script type="text/javascript">
+            /*------------------------------------------------------------/
+            功能：返回两个数中最小值
+            参数：数字p1,p2
+            返回：最小值的一个数
+            示例：$.MinNum(1,2);
+            /------------------------------------------------------------*/
+            (function ($) {
+                $.extend({
+                    "MinNum": function (p1, p2) {
+                        return (p1 > p2) ? p2 : p1;
+                    }
+                });
+            })(jQuery);
+            $(function () {
+                $("#btnShow").bind("click", function () {
+                    $(".tip").html("");
+                    var strTmp = "17与18中最小的数是：";
+                    strTmp +=$.MinNum(17, 18);
+                    //显示在页面中
+                    $(".tip").show().append(strTmp);
+                });
+            });
+        </script>
+
+除使用$.extend扩展工具函数外，还可以扩展原有的Object对象，在扩展对象时，两个对象将进行合并，当存在相同属性名时，后者将覆盖前者，调用格式为：
+$.extend (obj1,obj2,…objN);
+        <script type="text/javascript">
+            $(function () {
+                var objInfo = { name: "" };
+                var objMess = { name: "白富美,", title: "欢迎与我联系！" };
+                var objNewInfo =$.extend (objInfo,objMess);
+                var strTmp = "<b>对象 白富美 合并后</b>：<br/><br/>";
+                strTmp += objNewInfo.name + objInfo.title;
+                //显示在页面中
+                $(".tip").show().append(strTmp);
+            });
+        </script>
 
 
 
