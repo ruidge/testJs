@@ -70,9 +70,9 @@ mysql>>ALTER TABLE user CHANGE name username VARCHAR(30);
 使用insert语句向表中插入三个员工的信息
 方式一、
 mysql>>INSERT INTO user (id,username,birthday,entry_date,job,salary) VALUES(1,'zhangranran','1986-01-09','2012-05-10','coder',10000.00);
-方式二、（字段的值都是用户来填写的）
+方式二、
 mysql>>INSERT INTO user VALUES(2,'guolei','1988-01-10','2012-05-10','coder',11000.00);
-方式三、（id字段是由数据库自动生成的，当前无法实验）
+方式三、
 mysql>>INSERT INTO user (username,birthday,entry_date,job,salary) VALUES('zhangranran','1986-01-09','2012-05-10','coder',10000.00);
 插入中文数据
 mysql>>INSERT INTO user VALUES(3,'娇姐','1989-01-10','2012-05-10','coder',12000.00);
