@@ -1,0 +1,75 @@
+(貌似key加不加引号结果一样)
+insert 操作:
+db.person.insert({"name":"ruidge","age":20})
+db.person.insert({"name":"joe","age":25})
+
+var single = {"name":"jack","age":30,"password":"123456","address":{"province":"anhui","city":"hefei"},"fav":["apple","banana"]}
+db.person.insert(single)
+
+find 操作:
+db.person.find()
+db.person.find({"name":"jack"})
+
+remove 操作:
+db.person.remove()
+1."$gt", "$gte", "$lt", "$lte", "$ne", "没有特殊关键字"
+db.person.find({age:{$gt:20}})
+db.person.find({age:{$lt:20}})
+db.person.find({age:20})
+2."无关键字“, "$or", "$in"，"$nin"
+db.person.find({"address.province":"anhui"})
+db.person.find({"address.province":{$in:["anhui"]}})
+db.person.find({"$or":[{"address.province":"anhui"},{"address.province":"guangdong"}]})
+3.正则表达式
+db.person.find({"name":/^j/},"name":/e$/)
+4.$where
+db.person.find({"$where":function(){return this.name == "jack"}})
+
+update 操作:
+1.整体更新:
+var model = db.person.findOne({"name":"jack"})
+model.age = 30
+db.person.update({"name":"jack"},model)
+2.局部更新:
+$inc 原有的基础上自增$inc指定的值，如果“文档”中没有此key，则会创建key
+db.person.update({"name":"jack"},{"$inc":{"age":20}})
+$set 直接设置为指定的值
+db.person.update({"name":"jack"},{"$set":{"age":20}})
+3.upsert操作 : 如果找不到直接新建:update的第三个参数设置为true
+db.person.update({"name":"jackson"},{"$inc":{"age":1}},true)
+4.批量更新:
+在mongodb中如果匹配多条，默认的情况下只更新第一条，那么如果我们有需求必须批量更新，那么在mongodb中实现也是很简单
+的，在update的第四个参数中设为true即可
+
+聚合:
+1.count
+db.person.count({"age":{"$gt":20}})
+2.distinct
+db.person.distinct("age")//参数必须为string
+3.group
+//TODO
+4.mapReduce
+//TODO
+
+游标:
+var list=db.person.find();
+list其实并没有获取到person中的文档，而是申明一个“查询结构”，等我们需要的时候通过
+for或者next()一次性加载过来，然后让游标逐行读取
+var list = db.person.find()
+list.forEach(function(x){print (x.name)})
+
+var single=db.person.find().sort({"name":1}).skip(2).limit(2);//升序
+var single=db.person.find().sort({"name":-1}).skip(2).limit(2);//降序
+
+
+
+
+
+
+
+
+
+
+
+
+
