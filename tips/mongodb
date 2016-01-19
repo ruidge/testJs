@@ -10,8 +10,6 @@ find 操作:
 db.person.find()
 db.person.find({"name":"jack"})
 
-remove 操作:
-db.person.remove()
 1."$gt", "$gte", "$lt", "$lte", "$ne", "没有特殊关键字"
 db.person.find({age:{$gt:20}})
 db.person.find({age:{$lt:20}})
@@ -41,13 +39,34 @@ db.person.update({"name":"jackson"},{"$inc":{"age":1}},true)
 在mongodb中如果匹配多条，默认的情况下只更新第一条，那么如果我们有需求必须批量更新，那么在mongodb中实现也是很简单
 的，在update的第四个参数中设为true即可
 
+remove 操作:
+db.person.remove()
+
 聚合:
 1.count
 db.person.count({"age":{"$gt":20}})
 2.distinct
 db.person.distinct("age")//参数必须为string
 3.group
-//TODO
+key：  这个就是分组的key，我们这里是对年龄分组。
+initial: 每组都分享一个”初始化函数“，特别注意：是每一组，比如这个的age=20的value的list分享一个initial函数，age=22同样也分享一个initial函数。
+$reduce: 这个函数的第一个参数是当前的文档对象，第二个参数是上一次function操作的累计对象，第一次为initial中的{”perosn“：[]}。有多少个文档， $reduce就会调用多少次。
+condition:  这个就是过滤条件。
+finalize:这是个函数，每一组文档执行完后，多会触发此方法，那么在每组集合里面加上count也就是它的活了。
+
+db.person.group({
+    "key":{"age":true},
+    "initial":{"person":[]},
+    "$reduce":function(cur,prev){
+        prev.person.push(cur);
+    },
+    "finalize":function(out){
+        out.count=out.person.length;
+    },
+    "condition":{"age":{"$gt":10}}
+})
+
+
 4.mapReduce
 //TODO
 
