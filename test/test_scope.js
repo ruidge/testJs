@@ -41,13 +41,12 @@ function test3() {
         console.log(a);
     }
 
-    function show(f) {
+    {
         var a = 20;
         (function () {
-            f();
+            fn();
         })();
     }
 
-    show(fn);
 }
 
