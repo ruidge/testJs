@@ -1,11 +1,11 @@
 function main() {
-    let promise = new Promise(function (resolve, reject) {
+    let promise = new Promise( (resolve, reject) =>{
         sleepBlock(1000)
         //必须
         // resolve("sleep 1000 resolve");
         reject("sleep 1000 reject");
     });
-    promise.then(function (value) {
+    promise.then((value) => {
             console.log(value)
             sleepBlock(1000)
             return "resolve 1"
