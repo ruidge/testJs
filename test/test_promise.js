@@ -1,13 +1,15 @@
+let lib = require('./lib');
+
 function main() {
-    let promise = new Promise( (resolve, reject) =>{
-        sleepBlock(1000)
+    let promise = new Promise((resolve, reject) => {
+        lib.sleepBlock(1000)
         //必须
         // resolve("sleep 1000 resolve");
         reject("sleep 1000 reject");
     });
     promise.then((value) => {
             console.log(value)
-            sleepBlock(1000)
+            lib.sleepBlock(1000)
             return "resolve 1"
         }, function (value) {
             console.log(value)
@@ -24,9 +26,3 @@ function main() {
 }
 
 main()
-
-function sleepBlock(durationMs) {
-    var now = new Date().getTime();
-    while (new Date().getTime() < now + durationMs) {
-    }
-}
