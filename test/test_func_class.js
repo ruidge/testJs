@@ -34,13 +34,11 @@ class Stu4 {
 }
 
 
-function main() {
-    var stu3 = Stu3("Stu3", 0)
+(function main() {
+    var stu3 = new Stu3("Stu3", 0)
     stu3.gradeUpward()
     stu3.printInfo()
     var stu4 = new Stu4("Stu4", 4)
     stu4.gradeUpward()
     stu4.printInfo()
-}
-
-main()
+})()
